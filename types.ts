@@ -8,6 +8,7 @@ export enum Language {
 export interface RemediationData {
   conceptReview: string;
   practiceProblems: string[];
+  answerKey: string[];
 }
 
 export interface AppState {

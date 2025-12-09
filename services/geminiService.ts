@@ -19,8 +19,16 @@ const remediationSchema: Schema = {
       },
       description: "List of 5 practice problems.",
     },
+    answerKey: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.STRING,
+        description: "The correct answer for the corresponding practice problem."
+      },
+      description: "List of 5 answers corresponding to the practice problems.",
+    },
   },
-  required: ["conceptReview", "practiceProblems"],
+  required: ["conceptReview", "practiceProblems", "answerKey"],
 };
 
 export const analyzeQuizImage = async (
@@ -41,7 +49,9 @@ export const analyzeQuizImage = async (
          - LANGUAGE REQUIREMENT: Write this section strictly in ${language}.
       4. Create 5 'Practice Problems': Generate new problems similar to the error but DIFFERENT values. 
          - Contextualize these problems using Filipino culture (e.g., sari-sari store, jeepney fare, mangoes, wet market, peso coins, local geography).
-         - LANGUAGE REQUIREMENT: Write the problems strictly in ${language}. Do NOT use Taglish if ${language} is English. For example, if English is selected, use "How much change..." instead of "Magkano ang sukli...".
+         - LANGUAGE REQUIREMENT: Write the problems strictly in ${language}. 
+         - CRITICAL: If ${language} is English, use ONLY English. Do NOT use Tagalog words or 'Taglish' unless they are proper nouns (like 'Jeepney' or 'Manila').
+      5. Create an 'Answer Key': Provide the concise correct answer for each of the 5 problems.
       
       Output must be strictly JSON matching the schema provided.
     `;

@@ -92,13 +92,36 @@ export const generateWorksheetPDF = (data: RemediationData, language: Language) 
       cursorY += 20; // Space for next question
     });
 
+    // --- Section 3: Answer Key (New Page) ---
+    doc.addPage();
+    
+    // Header for Answer Key Page
+    doc.setFillColor(0, 56, 168); 
+    doc.rect(0, 0, pageWidth, 20, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("Teacher's Answer Key", margin, 13);
+
+    cursorY = 35;
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "normal");
+
+    data.answerKey.forEach((answer, index) => {
+       const cleanAnswer = sanitizeText(answer);
+       const answerText = `${index + 1}. ${cleanAnswer}`;
+       doc.text(answerText, margin, cursorY);
+       cursorY += 10;
+    });
+
     // --- Footer ---
     const pageCount = doc.getNumberOfPages();
     for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(100);
-        doc.text('Sagip - Helping Filipino Learners Succeed', pageWidth / 2, 290, { align: 'center' });
+        doc.text(`Sagip - Page ${i} of ${pageCount}`, pageWidth / 2, 290, { align: 'center' });
     }
 
     doc.save(`Sagip_Worksheet_${Date.now()}.pdf`);

@@ -37,9 +37,11 @@ export const analyzeQuizImage = async (
       Task:
       1. Analyze the attached image of a student's failed quiz/worksheet.
       2. Identify the specific misconception or error the student made.
-      3. Create a 'Concept Review': Explain the correct concept simply. Use an encouraging tone. Use the language: ${language}.
+      3. Create a 'Concept Review': Explain the correct concept simply. Use an encouraging tone. 
+         - LANGUAGE REQUIREMENT: Write this section strictly in ${language}.
       4. Create 5 'Practice Problems': Generate new problems similar to the error but DIFFERENT values. 
          - Contextualize these problems using Filipino culture (e.g., sari-sari store, jeepney fare, mangoes, wet market, peso coins, local geography).
+         - LANGUAGE REQUIREMENT: Write the problems strictly in ${language}. Do NOT use Taglish if ${language} is English. For example, if English is selected, use "How much change..." instead of "Magkano ang sukli...".
       
       Output must be strictly JSON matching the schema provided.
     `;

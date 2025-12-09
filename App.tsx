@@ -48,7 +48,15 @@ const App: React.FC = () => {
 
   const handleDownload = () => {
     if (state.result) {
-      generateWorksheetPDF(state.result, state.language);
+      try {
+        generateWorksheetPDF(state.result, state.language);
+      } catch (err) {
+        console.error("Download error:", err);
+        setState(prev => ({
+          ...prev,
+          error: "Failed to download PDF. Try refreshing the page."
+        }));
+      }
     }
   };
 
@@ -103,7 +111,7 @@ const App: React.FC = () => {
 
         {/* Error State */}
         {state.error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center animate-shake">
             <AlertCircle size={20} className="mr-2 flex-shrink-0" />
             <p className="text-sm">{state.error}</p>
           </div>

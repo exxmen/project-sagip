@@ -1,0 +1,5 @@
+{
+  "name": "Project Sagip",
+  "description": "A remediation worksheet generator for Filipino teachers powered by Gemini AI. Upload student quizzes to get instant, localized analysis and practice problems.",
+  "requestFramePermissions": []
+}

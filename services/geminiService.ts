@@ -9,13 +9,13 @@ const remediationSchema: Schema = {
   properties: {
     conceptReview: {
       type: Type.STRING,
-      description: "A kind, encouraging explanation of the error and the correct concept. Written in the requested language/dialect.",
+      description: "A kind, encouraging explanation of the error and the correct concept. Structured with paragraphs and bullet points.",
     },
     practiceProblems: {
       type: Type.ARRAY,
       items: {
         type: Type.STRING,
-        description: "A practice problem rooted in Filipino context."
+        description: "A practice problem formatted identically to the student's original quiz (MCQ, Fill-in-the-blank, etc)."
       },
       description: "List of 5 practice problems.",
     },
@@ -23,7 +23,7 @@ const remediationSchema: Schema = {
       type: Type.ARRAY,
       items: {
         type: Type.STRING,
-        description: "The correct answer for the corresponding practice problem."
+        description: "The correct answer. If MCQ, include the letter AND the full text (e.g., 'A. Option Text'). If identification, the word/phrase."
       },
       description: "List of 5 answers corresponding to the practice problems.",
     },
@@ -45,13 +45,28 @@ export const analyzeQuizImage = async (
       Task:
       1. Analyze the attached image of a student's failed quiz/worksheet.
       2. Identify the specific misconception or error the student made.
-      3. Create a 'Concept Review': Explain the correct concept simply. Use an encouraging tone. 
+      3. **Detect the Question Format**: Look at the original question the student failed. Is it Multiple Choice? True/False? Identification? Fill-in-the-blanks? Matching Type?
+      
+      4. Create a 'Concept Review': 
+         - Explain the correct concept simply. Use an encouraging tone.
+         - **FORMATTING**: DO NOT USE markdown. Do not write a single block of text. Structure your response:
+           - Start with a friendly opening.
+           - Use **bullet points** (using dashes '-') and line breaks to list the key concepts or steps to solve the problem.
+           - End with a short encouraging remark.
          - LANGUAGE REQUIREMENT: Write this section strictly in ${language}.
-      4. Create 5 'Practice Problems': Generate new problems similar to the error but DIFFERENT values. 
-         - Contextualize these problems using Filipino culture (e.g., sari-sari store, jeepney fare, mangoes, wet market, peso coins, local geography).
+      
+      5. Create 5 'Practice Problems': 
+         - **FORMAT REQUIREMENT**: You MUST use the **SAME** question format as the original question you detected in step 3. 
+           - If Multiple Choice: Provide the question text followed by 4 distinct options labeled A, B, C, and D. Separate options with newlines.
+           - If Fill-in-the-blanks: Use '________' for the blank.
+           - If Identification/True or False: Provide the question/statement clearly.
+         - CONTEXT: Contextualize these problems using Filipino culture (e.g., sari-sari store, jeepney fare, mangoes, wet market, peso coins, local geography).
          - LANGUAGE REQUIREMENT: Write the problems strictly in ${language}. 
          - CRITICAL: If ${language} is English, use ONLY English. Do NOT use Tagalog words or 'Taglish' unless they are proper nouns (like 'Jeepney' or 'Manila').
-      5. Create an 'Answer Key': Provide the concise correct answer for each of the 5 problems.
+      
+      6. Create an 'Answer Key': Provide the correct answer for each of the 5 problems.
+         - If MCQ: Provide the letter followed by the full answer text (e.g., 'A. The full answer text').
+         - If non-MCQ: Provide the correct word, phrase, or sentence.
       
       Output must be strictly JSON matching the schema provided.
     `;

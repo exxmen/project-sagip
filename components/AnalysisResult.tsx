@@ -38,13 +38,14 @@ const AnalysisResult: React.FC<AnalysisResultProps> = ({ data }) => {
           <h2 className="text-lg font-bold text-gray-800">Remediation Exercises</h2>
         </div>
         <div className="p-5">
-          <ul className="space-y-4">
+          <ul className="space-y-6">
             {data.practiceProblems.map((problem, idx) => (
               <li key={idx} className="flex items-start">
                 <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-deped-blue text-xs font-bold mr-3 mt-0.5">
                   {idx + 1}
                 </span>
-                <span className="text-gray-700">{problem}</span>
+                {/* whitespace-pre-wrap ensures MCQ options appear on new lines */}
+                <span className="text-gray-700 whitespace-pre-wrap leading-relaxed">{problem}</span>
               </li>
             ))}
           </ul>

@@ -10,7 +10,9 @@ const sanitizeText = (text: string): string => {
     .replace(/—/g, "-") // Em-dash
     .replace(/“/g, '"') // Smart quotes
     .replace(/”/g, '"')
-    .replace(/’/g, "'");
+    .replace(/’/g, "'")
+    .replace(/•/g, "-") // Bullet point
+    .replace(/●/g, "-"); // Alternative bullet
 };
 
 export const generateWorksheetPDF = (data: RemediationData, language: Language) => {
@@ -53,6 +55,7 @@ export const generateWorksheetPDF = (data: RemediationData, language: Language) 
     doc.setFontSize(11);
     
     const cleanConcept = sanitizeText(data.conceptReview);
+    // splitTextToSize preserves existing newlines and wraps long lines
     const splitConcept = doc.splitTextToSize(cleanConcept, contentWidth);
     doc.text(splitConcept, margin, cursorY);
     
@@ -110,9 +113,16 @@ export const generateWorksheetPDF = (data: RemediationData, language: Language) 
 
     data.answerKey.forEach((answer, index) => {
        const cleanAnswer = sanitizeText(answer);
-       const answerText = `${index + 1}. ${cleanAnswer}`;
-       doc.text(answerText, margin, cursorY);
-       cursorY += 10;
+       const answerPrefix = `${index + 1}. `;
+       const answerText = `${answerPrefix}${cleanAnswer}`;
+       
+       // Split text to handle long answers (Identification/Essay types)
+       const splitAnswer = doc.splitTextToSize(answerText, contentWidth);
+       
+       doc.text(splitAnswer, margin, cursorY);
+       
+       // Update cursor based on number of lines
+       cursorY += splitAnswer.length * 5 + 5;
     });
 
     // --- Footer ---

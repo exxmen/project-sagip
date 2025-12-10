@@ -5,7 +5,7 @@ import ImageUploader from './components/ImageUploader';
 import AnalysisResult from './components/AnalysisResult';
 import { analyzeQuizImage } from './services/geminiService';
 import { generateWorksheetPDF } from './services/pdfService';
-import { Loader2, Download, AlertCircle, RefreshCw } from 'lucide-react';
+import { Loader2, Download, AlertCircle, RefreshCw, ShieldAlert } from 'lucide-react';
 
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>({
@@ -75,6 +75,20 @@ const App: React.FC = () => {
            <div className="flex justify-between items-center mb-2 px-1">
              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Step 1: Upload Quiz</h2>
            </div>
+           
+           {/* Privacy Note */}
+           <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 flex items-start">
+             <ShieldAlert size={16} className="text-orange-600 mt-0.5 mr-2 flex-shrink-0" />
+             <p className="text-xs text-orange-800">
+               <strong>Competition Version:</strong> Uses Google Gemini Free Tier. Uploaded data is subject to Google's privacy policy and may be used for model training. Please avoid uploading sensitive personal information (PII).
+             </p>
+           </div>
+
+           {/* Terms of Use */}
+           <p className="text-[10px] text-gray-400 text-center mt-2 mb-4">
+             By using Sagip, you agree to the <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-gray-600">Terms of Use</a> and acknowledge that AI may generate inaccurate info.
+           </p>
+
            <ImageUploader 
             image={state.image} 
             onImageSelect={handleImageSelect} 
